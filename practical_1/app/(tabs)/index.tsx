@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Image, StyleSheet, View, Text, TouchableOpacity, SafeAreaView, ScrollView, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
+import { useRouter } from 'expo-router';
+import LanguagePopup from '@/components/LanguagePopup';
 
 // Get screen width for the swiper
 const { width } = Dimensions.get('window');
@@ -35,22 +37,39 @@ const SplashScreen = () => {
 
 // Login/Onboarding Screen Component
 const LoginScreen = () => {
+  // Add router for navigation
+  const router = useRouter();
+  
+  // Language state
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [languagePopupVisible, setLanguagePopupVisible] = useState(false);
+  
+  // Get language display name
+  const getLanguageDisplay = (code: string) => {
+    switch(code) {
+      case 'en': return 'English';
+      case 'id': return 'Bahasa Indonesia';
+      case 'vi': return 'Tiếng Việt';
+      default: return 'English';
+    }
+  };
+
   // Onboarding content - add your three sets of content here
   const onboardingData = [
     {
       image: require('@/assets/images/gojek_illustration1.png'),
       title: 'Get going with us',
-      description: 'Use GoCar to get across town - from anywhere, at any time  '
+      description: 'Use GoCar to get across town - from anywhere, at any time.'
     },
     {
       image: require('@/assets/images/gojek_illustration2.png'), // Add your second image
-      title: 'Welcome to Gojek!',
-      description: 'We are your go-to app for hassle-free commutes   '
+      title: 'Order food easily',
+      description: 'Get your favorite meals delivered right to your doorstep.'
     },
     {
       image: require('@/assets/images/gojek_illustration3.png'), // Add your third image
-      title: 'Rides for all',
-      description: 'Up to three stops with every trip - prefect to travel with friends and family'
+      title: 'Pay with convenience',
+      description: 'Quick, secure payments for all your Gojek services.'
     }
   ];
 
@@ -65,6 +84,11 @@ const LoginScreen = () => {
     setCurrentPage(currentPage);
   };
 
+  // Handle navigation to signup screen
+  const handleSignUp = () => {
+    router.push('/(tabs)/signup');  
+  };
+
   return (
     <SafeAreaView style={styles.loginContainer}>
       {/* Header with logo and language selector */}
@@ -76,8 +100,11 @@ const LoginScreen = () => {
             resizeMode="contain"
           />
         </View>
-        <TouchableOpacity style={styles.languageButton}>
-          <Text style={styles.languageText}>English </Text>
+        <TouchableOpacity 
+          style={styles.languageButton}
+          onPress={() => setLanguagePopupVisible(true)}
+        >
+          <Text style={styles.languageText}>{getLanguageDisplay(selectedLanguage)} </Text>
         </TouchableOpacity>
       </View>
       
@@ -119,10 +146,12 @@ const LoginScreen = () => {
                 currentPage === index && styles.activeDot
               ]}
               onPress={() => {
-                scrollViewRef.current?.scrollTo({
-                  x: index * width,
-                  animated: true
-                });
+                if (scrollViewRef.current) {
+                  scrollViewRef.current.scrollTo({
+                    x: index * width,
+                    animated: true
+                  });
+                }
               }}
             />
           ))}
@@ -133,8 +162,11 @@ const LoginScreen = () => {
           <Text style={styles.loginButtonText}>Log in</Text>
         </TouchableOpacity>
         
-        {/* Sign up button */}
-        <TouchableOpacity style={styles.signupButton}>
+        {/* Sign up button - Added onPress to navigate to signup */}
+        <TouchableOpacity 
+          style={styles.signupButton}
+          onPress={handleSignUp}
+        >
           <Text style={styles.signupButtonText}>I'm new, sign me up</Text>
         </TouchableOpacity>
         
@@ -146,6 +178,14 @@ const LoginScreen = () => {
       
       {/* Bottom Line */}
       <View style={styles.loginBottomLine} />
+
+      {/* Language selection popup */}
+      <LanguagePopup
+        visible={languagePopupVisible}
+        onClose={() => setLanguagePopupVisible(false)}
+        onSelectLanguage={(language) => setSelectedLanguage(language)}
+        selectedLanguage={selectedLanguage}
+      />
     </SafeAreaView>
   );
 };
