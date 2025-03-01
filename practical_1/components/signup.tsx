@@ -12,10 +12,27 @@ import {
   ScrollView
 } from 'react-native';
 import { router } from 'expo-router';
+import CountryCodePopup from './CountryCodePopup';
+
+// Country interface
+interface Country {
+  name: string;
+  code: string;
+  flag: string;
+  dialCode: string;
+}
 
 const SignupScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [countryCode, setCountryCode] = useState('+65');
+  const [countryCodePopupVisible, setCountryCodePopupVisible] = useState(false);
+  
+  // Default to Singapore
+  const [selectedCountry, setSelectedCountry] = useState<Country>({
+    name: 'Singapore',
+    code: 'SG',
+    flag: '🇸🇬',
+    dialCode: '+65'
+  });
 
   // Handle back button press
   const handleBack = () => {
@@ -25,7 +42,7 @@ const SignupScreen = () => {
   // Handle continue button press
   const handleContinue = () => {
     // Add validation here if needed
-    console.log('Continue with phone number:', countryCode + phoneNumber);
+    console.log('Continue with phone number:', selectedCountry.dialCode + phoneNumber);
     // Navigate to the next screen in your flow
     // router.push('/verification'); // Uncomment when you have this route
   };
@@ -43,6 +60,11 @@ const SignupScreen = () => {
     } else {
       setPhoneNumber(phoneNumber + num);
     }
+  };
+
+  // Handle country selection
+  const handleSelectCountry = (country: Country) => {
+    setSelectedCountry(country);
   };
 
   return (
@@ -63,7 +85,7 @@ const SignupScreen = () => {
                 <Text style={styles.helpButtonText}>?</Text>
               </TouchableOpacity>
               <View style={styles.languageContainer}>
-                <Text style={styles.languageText}> English </Text>
+                <Text style={styles.languageText}>English </Text>
               </View>
             </View>
           </View>
@@ -77,10 +99,14 @@ const SignupScreen = () => {
             <View style={styles.phoneInputContainer}>
               <Text style={styles.phoneLabel}>Phone number*</Text>
               <View style={styles.phoneInputWrapper}>
-                <View style={styles.countryCodeContainer}>
-                  <Text style={styles.countryFlag}>🇸🇬</Text>
-                  <Text style={styles.countryCode}>{countryCode}</Text>
-                </View>
+                {/* Country Code Selector - Now touchable */}
+                <TouchableOpacity 
+                  style={styles.countryCodeContainer}
+                  onPress={() => setCountryCodePopupVisible(true)}
+                >
+                  <Text style={styles.countryFlag}>{selectedCountry.flag}</Text>
+                  <Text style={styles.countryCode}>{selectedCountry.dialCode}</Text>
+                </TouchableOpacity>
                 <TextInput
                   style={styles.phoneInput}
                   value={phoneNumber}
@@ -124,6 +150,7 @@ const SignupScreen = () => {
             
             {/* GOTO Logo */}
             <View style={styles.gotoContainer}>
+    
               <Image 
                 source={require('@/assets/images/goto-logo.png')} 
                 style={styles.gotoLogo}
@@ -140,7 +167,7 @@ const SignupScreen = () => {
               </TouchableOpacity>
               <TouchableOpacity style={styles.keyboardKey} onPress={() => handleNumberInput('2')}>
                 <Text style={styles.keyboardKeyText}>2</Text>
-                <Text style={styles.keyboardKeySubText}>ABC</Text>
+                <Text style={styles.keyboardKeySubText}>ABC </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.keyboardKey} onPress={() => handleNumberInput('3')}>
                 <Text style={styles.keyboardKeyText}>3</Text>
@@ -150,11 +177,11 @@ const SignupScreen = () => {
             <View style={styles.keyboardRow}>
               <TouchableOpacity style={styles.keyboardKey} onPress={() => handleNumberInput('4')}>
                 <Text style={styles.keyboardKeyText}>4</Text>
-                <Text style={styles.keyboardKeySubText}>GHI</Text>
+                <Text style={styles.keyboardKeySubText}>GHI </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.keyboardKey} onPress={() => handleNumberInput('5')}>
                 <Text style={styles.keyboardKeyText}>5</Text>
-                <Text style={styles.keyboardKeySubText}>JKL</Text>
+                <Text style={styles.keyboardKeySubText}>JKL </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.keyboardKey} onPress={() => handleNumberInput('6')}>
                 <Text style={styles.keyboardKeyText}>6</Text>
@@ -164,7 +191,7 @@ const SignupScreen = () => {
             <View style={styles.keyboardRow}>
               <TouchableOpacity style={styles.keyboardKey} onPress={() => handleNumberInput('7')}>
                 <Text style={styles.keyboardKeyText}>7</Text>
-                <Text style={styles.keyboardKeySubText}>PQRS</Text>
+                <Text style={styles.keyboardKeySubText}>PQRS </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.keyboardKey} onPress={() => handleNumberInput('8')}>
                 <Text style={styles.keyboardKeyText}>8</Text>
@@ -187,6 +214,14 @@ const SignupScreen = () => {
           </View>
         </SafeAreaView>
       </ScrollView>
+
+      {/* Country Code Popup */}
+      <CountryCodePopup
+        visible={countryCodePopupVisible}
+        onClose={() => setCountryCodePopupVisible(false)}
+        onSelectCountry={handleSelectCountry}
+        selectedCountryCode={selectedCountry.code}
+      />
     </KeyboardAvoidingView>
   );
 };
@@ -211,10 +246,10 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   backButton: {
-    padding: 8,
+    padding: 15,
   },
   backButtonText: {
-    fontSize: 24,
+    fontSize: 30,
     color: '#333',
   },
   headerRight: {
@@ -282,6 +317,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 4,
   },
   countryFlag: {
     fontSize: 16,
@@ -337,7 +374,6 @@ const styles = StyleSheet.create({
   gotoContainer: {
     alignItems: 'center',
   },
-
   gotoLogo: {
     height: 24,
     width: 80,
