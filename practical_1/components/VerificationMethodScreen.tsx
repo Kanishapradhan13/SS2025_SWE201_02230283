@@ -21,14 +21,19 @@ const VerificationMethodScreen = () => {
     router.back();
   };
 
-  // Handle method selection
+  // Handle method selection - Update this in your VerificationMethodScreen.tsx
   const handleSelectMethod = (method: 'email' | 'whatsapp' | 'sms') => {
     console.log(`Selected verification via ${method}`);
+    
     // Navigate to the verification code entry screen with the selected method
-    // router.push({
-    //   pathname: '/verification-code',
-    //   params: { method, phoneNumber, countryCode }
-    // });
+    router.push({
+      pathname: '/(tabs)/verification-code',
+      params: { 
+        method,
+        phoneNumber,
+        countryCode
+      }
+    } as any);
   };
 
   // Handle help button press
