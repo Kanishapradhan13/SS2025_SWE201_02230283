@@ -54,22 +54,23 @@ const LoginScreen = () => {
     }
   };
 
+
   // Onboarding content - add your three sets of content here
   const onboardingData = [
     {
       image: require('@/assets/images/gojek_illustration1.png'),
       title: 'Get going with us',
-      description: 'Use GoCar to get across town - from anywhere, at any time.'
+      description: 'Use GoCar to get across town - from anywhere, at any time  '
     },
     {
       image: require('@/assets/images/gojek_illustration2.png'), // Add your second image
-      title: 'Order food easily',
-      description: 'Get your favorite meals delivered right to your doorstep.'
+      title: 'Welcome to Gojek!',
+      description: 'We are your go-to app for hassle-free commutes   '
     },
     {
       image: require('@/assets/images/gojek_illustration3.png'), // Add your third image
-      title: 'Pay with convenience',
-      description: 'Quick, secure payments for all your Gojek services.'
+      title: 'Rides for all',
+      description: 'Up to three stops with every trip - prefect to travel with friends and family'
     }
   ];
 

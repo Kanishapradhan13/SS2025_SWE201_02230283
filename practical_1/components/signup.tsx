@@ -39,12 +39,8 @@ const SignupScreen = () => {
     router.back();
   };
 
-  // Handle continue button press
   const handleContinue = () => {
-    // Add validation here if needed
-    console.log('Continue with phone number:', selectedCountry.dialCode + phoneNumber);
-    // Navigate to the next screen in your flow
-    // router.push('/verification'); // Uncomment when you have this route
+    router.push('/(tabs)/Verificationmethod' as any);
   };
 
   // Handle issue with number press
