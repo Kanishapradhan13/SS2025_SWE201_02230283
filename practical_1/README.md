@@ -1,14 +1,32 @@
-# Welcome to your Expo app 👋
+# Gojek App Clone: UI Development Process Using Expo and Expo Router
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+1. Project Structure
+We organized our app using the following folder structure:
 
-## Get started
+- /app - Contains all route files for Expo Router
 
-1. Install dependencies
+  - /(tabs) - Tab-based navigation routes
 
-   ```bash
-   npm install
-   ```
+    - _layout.tsx - Tab navigation configuration
+    - index.tsx - Home/landing page
+    - signup.tsx - Sign up screen
+    - verification-method.tsx - Verification method selection screen
+    - verificationcode.tsx - OTP verification screen
+
+
+- /components - Reusable UI components
+
+  - signup.tsx - Sign up form component
+  - VerificationMethodScreen.tsx - Verification method selection UI
+  - VerificationCodeScreen.tsx - OTP input UI
+  -  CountryCodePopup.tsx - Country code selection popup
+  - LanguagePopup.tsx - Language selection popup
+  - Various utility components (ThemedText, etc.)
+
+
+- /assets - Static assets like images
+
+  - /images - App images like logos and illustrations
 
 2. Start the app
 
@@ -16,35 +34,75 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Key UI Development Steps
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+1. Splash Screen Development
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Created a simple splash screen with Gojek logo and "from goto" text
+- Added a 3-second timer to transition to the landing page
 
-## Get a fresh project
 
-When you're ready, run:
+2. Landing Page with Swipeable Illustrations
 
-```bash
-npm run reset-project
+- Implemented a swipe-based carousel for onboarding images
+- Added pagination dots that update as user swipes
+- Created Sign In and Sign Up buttons
+- Added language selector in the header
+
+
+3. Language Selection Popup
+
+- Developed a bottom sheet popup for language selection
+- Implemented swipe-down gesture to dismiss
+- Added language options with radio button selection
+
+
+4. Sign Up Screen with Phone Entry
+
+- Created form for entering phone number with country code
+- Implemented custom numeric keyboard
+- Added conditional button state (enabled when phone number entered)
+
+
+5. Country Code Selection Popup
+
+- Developed searchable country list
+- Implemented sections for "Popular Countries" and "All Countries"
+- Added country flags and dial codes
+
+
+6. Verification Method Selection
+
+- Created a list of verification options (Email, WhatsApp, SMS)
+- Added distinctive icons for each method
+- Implemented navigation to verification code entry
+
+
+7. OTP Verification Screen
+
+- Created 4-digit OTP input with auto-focus functionality
+- Implemented countdown timer (60 seconds)
+- Added "Try another method" option
+
+## Navigation Implementation
+
+We used Expo Router to handle navigation between screens:
+
+```
+// Example navigation to sign up screen
+router.push('/(tabs)/signup');
+
+// Example navigation with parameters
+router.push({
+  pathname: '/(tabs)/verification-code',
+  params: { method, phoneNumber, countryCode }
+} as any);
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Challenges and Solutions
 
-## Learn more
+- TypeScript Route Type Checking: Used as any to bypass strict route checking when necessary
+- Proper File Naming: Ensured route file names matched exactly with navigation paths
+- Complex UI Interactions: Implemented custom behaviors like auto-advancing inputs for OTP
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The result is a clean, functional UI that closely matches the Gojek app design, with smooth navigation between screens and intuitive user interactions.
