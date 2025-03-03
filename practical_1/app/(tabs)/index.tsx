@@ -221,8 +221,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   gojekLogo: {
-    width: 60,
-    height: 60,
+    width: 90,
+    height: 90,
     marginBottom: 10,
   },
   fromContainer: {
